@@ -2,7 +2,7 @@
 
   <arg name="fixed" default="false"/>
   <arg name="robot_ns" default="/"/>
-  <arg name="model_name" default="leo"/>
+  <arg name="model_name" default="mycar"/>
 
   <include file="$(find my_worlds)/launch/spawn_model.launch"
            pass_all_args="true"/>

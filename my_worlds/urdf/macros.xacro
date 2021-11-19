@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="leo" 
+  <xacro:macro name="mycar" 
                params="default_antenna:=true
                        rockers_fixed:=true
                        footprint_link:=true
@@ -220,9 +220,9 @@
 
   </xacro:macro>
 
-  <!-- LEO GAZEBO -->
+  <!-- GAZEBO -->
 
-  <xacro:macro name="leo_gazebo"
+  <xacro:macro name="my_worlds"
                params="robot_ns:=''">
 
     <xacro:property name="link_prefix" value=""/>
@@ -405,7 +405,7 @@
 
   </xacro:macro>
 
-  <xacro:macro name="leo_sim" 
+  <xacro:macro name="car_sim" 
                params="default_antenna:=true 
                        fixed:=false
                        robot_ns:=''">
@@ -415,11 +415,11 @@
       <xacro:property name="link_prefix" value="${robot_ns}/"/>
     </xacro:if>
 
-    <xacro:leo default_antenna="${default_antenna}"
+    <xacro:mycar default_antenna="${default_antenna}"
                rockers_fixed="false"
                link_prefix="${link_prefix}"/>
 
-    <xacro:leo_gazebo robot_ns="${robot_ns}"/>
+    <xacro:my_worlds robot_ns="${robot_ns}"/>
 
     <xacro:if value="${fixed}">
       <link name="world"/>

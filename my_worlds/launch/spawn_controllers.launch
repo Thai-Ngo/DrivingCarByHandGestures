@@ -22,7 +22,7 @@
           args="cmd_vel controllers/diff_drive/cmd_vel"/>
 
     <node name="odom_relay"
-          pkg="leo_gazebo"
+          pkg="my_worlds"
           type="odom_relay"/>
 
   </group>

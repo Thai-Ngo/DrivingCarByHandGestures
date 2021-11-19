@@ -1,42 +1,44 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
-  <actor name="actor">
-     <skin>
-        <filename>model://mycar/materials/Rocker.dae</filename>
-        <scale>1.0</scale>
-     </skin>
-     <pose>0 0 0 0 0 0</pose>
-     <animation name="walking">
-        <filename>model://actor_walk/meshes/ANIMATION_walking.dae</filename>
-        <scale>1.000000</scale>
-        <interpolate_x>true</interpolate_x>
-     </animation>
-     <script>
-        <loop>true</loop>
-        <delay_start>0.000000</delay_start>
-        <auto_start>true</auto_start>
-        <trajectory id="0" type="walking">
-          <waypoint>
-            <time>0</time>
-            <pose>0 2 0 0 0 -1.57</pose>
-          </waypoint>
-          <waypoint>
-            <time>2</time>
-            <pose>0 -2 0 0 0 -1.57</pose>
-          </waypoint>
-          <waypoint>
-            <time>2.5</time>
-            <pose>0 -2 0 0 0 1.57</pose>
-          </waypoint>
-          <waypoint>
-            <time>7</time>
-            <pose>0 2 0 0 0 1.57</pose>
-          </waypoint>
-          <waypoint>
-            <time>7.5</time>
-            <pose>0 2 0 0 0 -1.57</pose>
-          </waypoint>
-        </trajectory>
-     </script>
-  </actor>
+  <model name="my_car">
+    <link name="rocker_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://my_worlds/models/mycar/materials/Rocker.dae"/>
+        </geometry>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <mesh filename="package://my_worlds/models/mycar/materials/Rocker_outline.stl"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="wheel_link">
+        <visual>
+          <geometry>
+            <mesh filename="package://my_worlds/models/mycar/materials/Wheel${model}.dae"/>
+          </geometry>
+        </visual>
+        <collision>
+          <origin xyz="0 0.04485 0" rpy="${pi/2} 0 0"/>
+          <geometry>
+            <cylinder radius="0.057" length="0.07"/>
+          </geometry>
+        </collision>
+        <collision>
+          <origin xyz="0 0.04485 0" rpy="${pi/2} 0 0"/>
+          <geometry>
+            <cylinder radius="0.0625" length="0.04"/>
+          </geometry>
+        </collision>
+        <collision>
+          <geometry>
+            <mesh filename="package://my_worlds/models/mycar/materials/Wheel_outline.stl"/>
+          </geometry>
+        </collision>
+    </link>
+
+    
+  </mode>
 </sdf>
