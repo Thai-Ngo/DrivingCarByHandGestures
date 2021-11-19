@@ -1,0 +1,8 @@
+ <launch>
+
+  <include file="$(find my_worlds)/launch/leo_gazebo.launch"
+           pass_all_args="true">
+    <arg name="world_name" value="$(find my_worlds)/worlds/smart.world"/>
+  </include>
+
+</launch>
