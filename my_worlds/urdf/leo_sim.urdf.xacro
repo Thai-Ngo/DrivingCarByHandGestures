@@ -5,7 +5,7 @@
   <xacro:arg name="fixed" default="false"/>
   <xacro:arg name="robot_ns" default=""/>
 
-  <xacro:include filename="$(find leo_description)/urdf/macros.xacro"/>
+  <xacro:include filename="$(find my_worlds)/urdf/macros.xacro"/>
 
   <xacro:leo_sim robot_ns="$(arg robot_ns)"
                  fixed="$(arg fixed)"/>

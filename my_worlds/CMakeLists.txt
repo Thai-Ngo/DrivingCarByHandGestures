@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(my_worlds)
 
+cmake_policy(SET CMP0054 NEW)
+
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   rospy
@@ -19,7 +21,12 @@ catkin_package(
   CATKIN_DEPENDS
   	roscpp
   	rospy
+  	gazebo_ros
 )
+
+include_directories(${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS})
+link_directories(${GAZEBO_LIBRARY_DIRS})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
 
 # for plugin
 add_library(model_push_plugin SHARED src/model_push.cc)
@@ -29,11 +36,18 @@ target_link_libraries(model_push_plugin
 )
 
 add_library(
-  leo_gazebo_differential_plugin 
+  my_worlds_differential_plugin 
   src/differential_plugin.cpp
 )
-target_link_libraries(leo_gazebo_differential_plugin ${GAZEBO_LIBRARIES})
+target_link_libraries(my_worlds_differential_plugin ${GAZEBO_LIBRARIES})
 
+
+foreach(dir launch config models worlds)
+  install(
+    DIRECTORY ${dir}/
+    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir}
+  )
+endforeach(dir)
 
 
 #python install
@@ -43,16 +57,20 @@ catkin_install_python(PROGRAMS
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-link_directories(${GAZEBO_LIBRARY_DIRS})
-
-include_directories(
-  ${catkin_INCLUDE_DIRS}
-  ${src}
-  ${GAZEBO_INCLUDE_DIRS}
+catkin_install_python(
+  PROGRAMS scripts/odom_relay
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
+
+#include_directories(
+#  ${catkin_INCLUDE_DIRS}
+#  ${src}
+#  ${GAZEBO_INCLUDE_DIRS}
+#)
+
 install(
-  TARGETS leo_gazebo_differential_plugin
+  TARGETS my_worlds_differential_plugin
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 )
 ################################################

@@ -10,7 +10,7 @@
   
   <!--Load world enviroment-->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find my_worlds)/worlds/mycar.world"/>
+    <arg name="world_name" value="$(find my_worlds)/worlds/smart.world"/>
     <arg name="debug" value="$(arg debug)" />
     <arg name="gui" value="$(arg gui)" />
     <arg name="paused" value="$(arg pause)"/>

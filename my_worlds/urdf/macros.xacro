@@ -20,12 +20,12 @@
         </inertial>
         <visual>
           <geometry>
-            <mesh filename="package://leo_description/models/Rocker.dae"/>
+            <mesh filename="package://my_worlds/models/Rocker.dae"/>
           </geometry>
         </visual>
         <collision>
           <geometry>
-            <mesh filename="package://leo_description/models/Rocker_outline.stl"/>
+            <mesh filename="package://my_worlds/models/Rocker_outline.stl"/>
           </geometry>
         </collision>
       </link>
@@ -43,7 +43,7 @@
         </inertial>
         <visual>
           <geometry>
-            <mesh filename="package://leo_description/models/Wheel${model}.dae"/>
+            <mesh filename="package://my_worlds/models/Wheel${model}.dae"/>
           </geometry>
         </visual>
         <collision>
@@ -60,7 +60,7 @@
         </collision>
         <collision>
           <geometry>
-            <mesh filename="package://leo_description/models/Wheel_outline.stl"/>
+            <mesh filename="package://my_worlds/models/Wheel_outline.stl"/>
           </geometry>
         </collision>
       </link>
@@ -82,12 +82,12 @@
       </inertial>
       <visual>
         <geometry>
-          <mesh filename="package://leo_description/models/Chassis.dae"/>
+          <mesh filename="package://my_worlds/models/Chassis.dae"/>
         </geometry>
       </visual>
       <collision>
         <geometry>
-          <mesh filename="package://leo_description/models/Chassis_outline.stl"/>
+          <mesh filename="package://my_worlds/models/Chassis_outline.stl"/>
         </geometry>
       </collision>
     </link>
@@ -111,7 +111,7 @@
         </inertial>
         <visual>
           <geometry>
-            <mesh filename="package://leo_description/models/Antenna.dae"/>
+            <mesh filename="package://my_worlds/models/Antenna.dae"/>
           </geometry>
         </visual>
         <collision>

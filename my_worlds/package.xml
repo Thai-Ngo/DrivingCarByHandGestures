@@ -32,7 +32,14 @@
   <exec_depend>std_msgs</exec_depend>
 <build_depend>message_generation</build_depend>
   <exec_depend>message_runtime</exec_depend>
-
+  
+  <exec_depend>gazebo_ros_control</exec_depend>
+  <exec_depend>gazebo_plugins</exec_depend>
+  <exec_depend>joint_state_controller</exec_depend>
+  <exec_depend>diff_drive_controller</exec_depend>
+  <exec_depend>topic_tools</exec_depend>
+  <exec_depend>compressed_image_transport</exec_depend>
+  
   <!-- The export tag contains other, unspecified, tags -->
   <export>
     <!-- Other tools can request additional information be placed here -->
