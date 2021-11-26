@@ -1,5 +1,6 @@
 import cv2
 import mediapipe as mp
+
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
@@ -14,6 +15,7 @@ hand = mp_hands.Hands(
 try:
   while camera.isOpened():
     ret, frame = camera.read()
+
     if not ret:
       print("Can't open camera.")
       break
@@ -34,7 +36,9 @@ try:
         # mp_drawing_styles.get_default_hand_connections_style()
       )
     
-    cv2.imshow('MediaPipe Hands', cv2.flip(frame, 1))
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    cv2.imshow('MediaPipe Hands', cv2.flip(gray, 1))
     
     cv2.waitKey(1)
   
