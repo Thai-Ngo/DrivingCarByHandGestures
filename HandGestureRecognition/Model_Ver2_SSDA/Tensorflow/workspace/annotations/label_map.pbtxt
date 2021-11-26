@@ -1,0 +1,36 @@
+item { 
+	name:'fist'
+	id:1
+}
+item { 
+	name:'hello'
+	id:2
+}
+item { 
+	name:'okay'
+	id:3
+}
+item { 
+	name:'stop'
+	id:4
+}
+item { 
+	name:'thumb_up'
+	id:5
+}
+item { 
+	name:'thumb_down'
+	id:6
+}
+item { 
+	name:'turn_left'
+	id:7
+}
+item { 
+	name:'turn_right'
+	id:8
+}
+item { 
+	name:'yolo'
+	id:9
+}
