@@ -108,7 +108,6 @@ def main():
 
                 # Hand sign classification
                 hand_sign_id = keypoint_classifier(pre_processed_landmark_list)
-                print(hand_sign_id)
 
                 # Drawing part
                 debug_image = draw_bounding_rect(debug_image, brect)
