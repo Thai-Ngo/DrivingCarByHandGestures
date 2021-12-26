@@ -76,22 +76,6 @@ e = """
 Communications Failed
 """
 
-# def getKey():
-#     if os.name == 'nt':
-#       if sys.version_info[0] >= 3:
-#         return msvcrt.getch().decode()
-#       else:
-#         return msvcrt.getch()
-
-#     tty.setraw(sys.stdin.fileno())
-#     rlist, _, _ = select.select([sys.stdin], [], [], 0.1)
-#     if rlist:
-#         key = sys.stdin.read(1)
-#     else:
-#         key = ''
-
-#     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
-#     return key
 
 def vels(target_linear_vel, target_angular_vel):
     return "currently:\tlinear vel %s\t angular vel %s " % (target_linear_vel,target_angular_vel)
