@@ -116,9 +116,11 @@ def main():
                 # Conversion to relative coordinates / normalized coordinates
                 pre_processed_landmark_list = pre_process_landmark(
                     landmark_list)
+                print(pre_processed_landmark_list)
 
                 # Write to the dataset file
                 logging_csv(number, mode, pre_processed_landmark_list)
+                
 
                 # Hand sign classification
                 hand_sign_id = keypoint_classifier(pre_processed_landmark_list)

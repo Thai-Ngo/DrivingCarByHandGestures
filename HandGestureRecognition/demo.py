@@ -36,9 +36,8 @@ try:
         # mp_drawing_styles.get_default_hand_connections_style()
       )
     
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    cv2.imshow('MediaPipe Hands', cv2.flip(gray, 1))
+    cv2.imshow('MediaPipe Hands', cv2.flip(frame, 1))
     
     cv2.waitKey(1)
   
