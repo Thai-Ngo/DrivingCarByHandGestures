@@ -59,23 +59,26 @@ ANG_VEL_STEP_SIZE = 0.1
 msg = """
 Control Your TurtleBot3!
 ---------------------------
-Moving around:
-        w
-   a    s    d
-        x
+Moving around with your hand gesture:
+        Up
+Left    Stop    Right
+        Down
 
-w/x : increase/decrease linear velocity (Burger : ~ 0.22, Waffle and Waffle Pi : ~ 0.26)
-a/d : increase/decrease angular velocity (Burger : ~ 2.84, Waffle and Waffle Pi : ~ 1.82)
+Up/Down : increase/decrease linear velocity (Burger : ~ 0.22, Waffle and Waffle Pi : ~ 0.26)
+Left/Right : increase/decrease angular velocity (Burger : ~ 2.84, Waffle and Waffle Pi : ~ 1.82)
 
-space key, s : force stop
+Stop: force stop
 
-CTRL-C to quit
+Okay: run in a circular orbit
+Fist: run in square orbit
+
+CTRL-C, ESC to quit
+
 """
 
 e = """
 Communications Failed
 """
-
 
 def vels(target_linear_vel, target_angular_vel):
     return "currently:\tlinear vel %s\t angular vel %s " % (target_linear_vel,target_angular_vel)
@@ -254,13 +257,19 @@ if __name__=="__main__":
             row[0] for row in keypoint_classifier_labels
         ]
 
-    # FPS Measurement ########################################################
+    # Orbit variable ########################################################
+    round_orbit = False
+    square_orbit = False
+    round_stack = 0
+    square_stack = 0
+    
+    count = 0
 
     try:
         print(msg)
         while(1):
             # key = getKey()
-            cv.waitKey(10)
+            key = cv.waitKey(10)
             
             # Camera capture #####################################################
             ret, image = cap.read()
@@ -268,12 +277,89 @@ if __name__=="__main__":
             image = cv.flip(image, 1)  # Mirror display
             debug_image = copy.deepcopy(image)
             
-             # Detection implementation #############################################################
+            # Detection implementation #############################################################
             image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
 
             image.flags.writeable = False
             results = hands.process(image)
             image.flags.writeable = True
+            
+            # Run in round orbit
+            if round_orbit == True:
+                count += 1    
+                if count < 20:
+                    target_linear_vel   = 0.0
+                    control_linear_vel  = 0.0
+                    target_angular_vel  = 0.0
+                    control_angular_vel = 0.0
+                elif count == 20:
+                    if target_linear_vel == "burger":
+                        target_linear_vel = BURGER_MAX_LIN_VEL / 2
+                        target_angular_vel = BURGER_MAX_ANG_VEL / 10
+                    elif turtlebot3_model == "waffle" or turtlebot3_model == "waffle_pi":
+                        target_linear_vel = WAFFLE_MAX_LIN_VEL / 2
+                        target_angular_vel = WAFFLE_MAX_ANG_VEL / 10
+                    else:
+                        target_linear_vel = BURGER_MAX_LIN_VEL / 2
+                        target_angular_vel = BURGER_MAX_ANG_VEL / 10
+                elif count == 318:
+                    round_orbit = False
+                    target_linear_vel   = 0.0
+                    control_linear_vel  = 0.0
+                    target_angular_vel  = 0.0
+                    control_angular_vel = 0.0
+                    count = 0
+            
+                print("ROUND ORBIT: Current count = ", count)
+                
+            if square_orbit == True:
+                count += 1    
+                if count < 20:
+                    target_linear_vel   = 0.0
+                    control_linear_vel  = 0.0
+                    target_angular_vel  = 0.0
+                    control_angular_vel = 0.0
+                    
+                elif count == 20 or count == 190 or count == 360 or count == 530:
+                    if target_linear_vel == "burger":
+                        target_linear_vel = BURGER_MAX_LIN_VEL / 2
+                        target_angular_vel  = 0.0
+                        control_angular_vel = 0.0
+                    elif turtlebot3_model == "waffle" or turtlebot3_model == "waffle_pi":
+                        target_linear_vel = WAFFLE_MAX_LIN_VEL / 2
+                        target_angular_vel  = 0.0
+                        control_angular_vel = 0.0
+                    else:
+                        target_linear_vel = BURGER_MAX_LIN_VEL / 2
+                        target_angular_vel  = 0.0
+                        control_angular_vel = 0.0
+                        
+                elif count == 105 or count == 275 or count == 445 or count == 615:
+                    if target_linear_vel == "burger":
+                        target_angular_vel = BURGER_MAX_ANG_VEL / 10
+                        target_linear_vel   = 0.0
+                        control_linear_vel  = 0.0
+                    elif turtlebot3_model == "waffle" or turtlebot3_model == "waffle_pi":
+                        target_angular_vel = WAFFLE_MAX_ANG_VEL / 10
+                        target_linear_vel   = 0.0
+                        control_linear_vel  = 0.0
+                    else:
+                        target_angular_vel = BURGER_MAX_ANG_VEL / 10
+                        target_linear_vel   = 0.0
+                        control_linear_vel  = 0.0
+                        
+                elif count == 700:
+                    square_orbit = False
+                    target_linear_vel   = 0.0
+                    control_linear_vel  = 0.0
+                    target_angular_vel  = 0.0
+                    control_angular_vel = 0.0
+                    count = 0
+                    
+                print("SQUARE ORBIT: Current count = ", count)
+      
+                
+            # Run in square orbit           
             
             #  ####################################################################
             if results.multi_hand_landmarks is not None:
@@ -291,31 +377,72 @@ if __name__=="__main__":
                     hand_sign_id = keypoint_classifier(pre_processed_landmark_list)
                     
                     ################################################
-                    if hand_sign_id == 1 :
-                        target_linear_vel = checkLinearLimitVelocity(target_linear_vel + LIN_VEL_STEP_SIZE)
-                        status = status + 1
-                        print(vels(target_linear_vel,target_angular_vel))
-                    elif hand_sign_id == 2 :
-                        target_linear_vel = checkLinearLimitVelocity(target_linear_vel - LIN_VEL_STEP_SIZE)
-                        status = status + 1
-                        print(vels(target_linear_vel,target_angular_vel))
-                    elif hand_sign_id == 4 :
-                        target_angular_vel = checkAngularLimitVelocity(target_angular_vel + ANG_VEL_STEP_SIZE)
-                        status = status + 1
-                        print(vels(target_linear_vel,target_angular_vel))
-                    elif hand_sign_id == 5 :
-                        target_angular_vel = checkAngularLimitVelocity(target_angular_vel - ANG_VEL_STEP_SIZE)
-                        status = status + 1
-                        print(vels(target_linear_vel,target_angular_vel))
-                    elif hand_sign_id == 0 or hand_sign_id == 3:
-                        target_linear_vel   = 0.0
-                        control_linear_vel  = 0.0
-                        target_angular_vel  = 0.0
-                        control_angular_vel = 0.0
-                        print(vels(target_linear_vel, target_angular_vel))
-                    # else:
-                    #     if (key == '\x03'):
-                    #         break
+                    if round_orbit == False and square_orbit == False:
+                        if hand_sign_id == 1 :
+                            round_stack = 0
+                            square_stack = 0
+                            
+                            target_linear_vel = checkLinearLimitVelocity(target_linear_vel + LIN_VEL_STEP_SIZE)
+                            status = status + 1
+                            target_angular_vel  = 0.0
+                            control_angular_vel = 0.0
+                            print("UP:", vels(target_linear_vel,target_angular_vel))
+                        elif hand_sign_id == 2 :
+                            round_stack = 0
+                            square_stack = 0
+                            
+                            target_linear_vel = checkLinearLimitVelocity(target_linear_vel - LIN_VEL_STEP_SIZE)
+                            status = status + 1
+                            target_angular_vel  = 0.0
+                            control_angular_vel = 0.0
+                            print("DOWN:", vels(target_linear_vel,target_angular_vel))
+                        elif hand_sign_id == 4 :
+                            round_stack = 0
+                            square_stack = 0
+                            
+                            target_angular_vel = checkAngularLimitVelocity(target_angular_vel + ANG_VEL_STEP_SIZE)
+                            status = status + 1
+                            target_linear_vel   = 0.0
+                            control_linear_vel  = 0.0
+                            print("LEFT:", vels(target_linear_vel,target_angular_vel))
+                        elif hand_sign_id == 5 :
+                            round_stack = 0
+                            square_stack = 0
+                            
+                            target_angular_vel = checkAngularLimitVelocity(target_angular_vel - ANG_VEL_STEP_SIZE)
+                            status = status + 1
+                            target_linear_vel   = 0.0
+                            control_linear_vel  = 0.0
+                            print("RIGHT:", vels(target_linear_vel,target_angular_vel))
+                        elif hand_sign_id == 3:
+                            round_stack = 0
+                            square_stack = 0
+                            
+                            target_linear_vel   = 0.0
+                            control_linear_vel  = 0.0
+                            target_angular_vel  = 0.0
+                            control_angular_vel = 0.0
+                            status = status + 1
+                            print("STOP:", vels(target_linear_vel, target_angular_vel))
+                        elif hand_sign_id == 0:
+                            round_stack += 1
+                            print("OKAY: Stack value = ", round_stack)
+                            if (round_stack == 30):
+                                round_orbit = True
+                                print("OKAY: READY TO RUN IN ROUND ORBIT!!!")
+                                round_stack = 0
+                        elif hand_sign_id == 6:
+                            square_stack += 1
+                            print("FIST: Stack value = ", square_stack)
+                            if (square_stack == 30):
+                                square_orbit = True
+                                print("FIST: READY TO RUN IN SQUARE ORBIT!!!")
+                                square_stack = 0                     
+                        
+                        if key == 27:  # ESC
+                            break
+                    else:
+                        print("Running in orbit. Please wait!!!")
                     
                     ################################################
 
@@ -334,7 +461,34 @@ if __name__=="__main__":
                     )
             cv.imshow('Hand Gesture Recognition', debug_image)
             # debug_image = draw_info(debug_image, fps)
-           
+            
+            
+            #######################################
+            # if key == 'w' :
+            #     target_linear_vel = checkLinearLimitVelocity(target_linear_vel + LIN_VEL_STEP_SIZE)
+            #     status = status + 1
+            #     print(vels(target_linear_vel,target_angular_vel))
+            # elif key == 'x' :
+            #     target_linear_vel = checkLinearLimitVelocity(target_linear_vel - LIN_VEL_STEP_SIZE)
+            #     status = status + 1
+            #     print(vels(target_linear_vel,target_angular_vel))
+            # elif key == 'a' :
+            #     target_angular_vel = checkAngularLimitVelocity(target_angular_vel + ANG_VEL_STEP_SIZE)
+            #     status = status + 1
+            #     print(vels(target_linear_vel,target_angular_vel))
+            # elif key == 'd' :
+            #     target_angular_vel = checkAngularLimitVelocity(target_angular_vel - ANG_VEL_STEP_SIZE)
+            #     status = status + 1
+            #     print(vels(target_linear_vel,target_angular_vel))
+            # elif key == ' ' or key == 's' :
+            #     target_linear_vel   = 0.0
+            #     control_linear_vel  = 0.0
+            #     target_angular_vel  = 0.0
+            #     control_angular_vel = 0.0
+            #     print(vels(target_linear_vel, target_angular_vel))
+            # else:
+            #     if (key == '\x03'):
+            #         break
 
             if status == 20 :
                 print(msg)
