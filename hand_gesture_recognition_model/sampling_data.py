@@ -116,7 +116,7 @@ def main():
                 # Conversion to relative coordinates / normalized coordinates
                 pre_processed_landmark_list = pre_process_landmark(
                     landmark_list)
-                print(pre_processed_landmark_list)
+                # print(pre_processed_landmark_list)
 
                 # Write to the dataset file
                 logging_csv(number, mode, pre_processed_landmark_list)
@@ -132,12 +132,12 @@ def main():
                     (results.multi_hand_landmarks)[0],
                     mp_hands.HAND_CONNECTIONS
                 )
-                debug_image = draw_info_text(
-                    debug_image,
-                    brect,
-                    handedness,
-                    keypoint_classifier_labels[hand_sign_id],
-                )
+                # debug_image = draw_info_text(
+                #     debug_image,
+                #     brect,
+                #     handedness,
+                #     keypoint_classifier_labels[hand_sign_id],
+                # )
 
         debug_image = draw_info(debug_image, fps, mode, number)
 
